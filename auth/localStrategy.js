@@ -1,8 +1,8 @@
-const LocalStrategy = require("passport-local").Strategy;
-const bcrypt = require("bcryptjs");
-const { prisma } = require("../lib/prisma");
+import { Strategy as LocalStrategy } from "passport-local";
+import bcrypt from "bcryptjs";
+import { prisma } from "../lib/prisma.js";
 
-module.exports = function LocalStrategy(passport) {
+export default function configureLocalStrategy(passport) {
   passport.use(
     new LocalStrategy(
       {
@@ -30,4 +30,4 @@ module.exports = function LocalStrategy(passport) {
       },
     ),
   );
-};
+}

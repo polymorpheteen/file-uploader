@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+</head>
+
+<body>
+    <main>
+        <div class="register-container">
+            <h1>Create an account</h1>
+
+            <% if (error) { %>
+                <p style="color: red;">
+                    <%= error %>
+                </p>
+                <% } %>
+                    <form method="post" action="/register">
+
+                        <div class="form-group">
+                            <label for="name">Full Name:</label>
+                            <input type="text" name="name" id="name" required aria-required="true">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" name="email" required aria-required="true"
+                                pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" id="password" name="password" required aria-required="true"
+                                minlength="8">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password:</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" required
+                                aria-required="true" minlength="8">
+                        </div>
+
+                        <button type="submit">Register</button>
+                    </form>
+
+                    <p>Already have an account? <a href="/login">Log in</a></p>
+        </div>
+    </main>
+</body>
+
+</html>

@@ -1,11 +1,17 @@
 import "dotenv/config";
-const express = require("express");
-const path = require("node:path");
-const session = require("express-session");
-const passport = require("./auth/passport");
-const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
+import express from "express";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import session from "express-session";
+import passport from "./auth/passport.js";
+import { PrismaSessionStore } from "@quixo3/prisma-session-store";
+import { prisma } from "./lib/prisma.js";
+
+import registerRouter from "./routes/registerRouter.js";
+import loginRouter from "./routes/loginRouter.js";
 
 const app = express();
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 app.use(express.urlencoded({ extended: false }));
 app.use(
@@ -31,7 +37,12 @@ app.use(passport.session());
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-app.get("/", (req, res) => res.send("Hello, world!"));
+app.use("/register", registerRouter);
+app.use("/login", loginRouter);
+
+app.get("/", (req, res) => {
+  res.redirect("/register");
+});
 
 const PORT = 3000;
 app.listen(PORT, (error) => {

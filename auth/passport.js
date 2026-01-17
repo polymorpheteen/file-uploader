@@ -1,7 +1,8 @@
-const passport = require("passport");
-const { prisma } = require("../lib/prisma");
+import passport from "passport";
+import { prisma } from "../lib/prisma.js";
+import configureLocalStrategy from "./localStrategy.js";
 
-require("./localStrategy")(passport);
+configureLocalStrategy(passport);
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -16,4 +17,4 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-module.exports = passport;
+export default passport;
