@@ -1,21 +1,26 @@
-import {prisma} from '../lib/prisma.js';
+import bcrypt from "bcryptjs";
+import { prisma } from "../lib/prisma.js";
+
+const SALT_ROUNDS = 12;
 
 export async function createUser(email, password, name) {
-    const user = await prisma.user.create({
-        data: {
-            email,
-            password,
-            name,
-            folders: {
-                create: {
-                    name: '/home',
-                    parentId: null,
-                },
-            },
-        },
-        include: { folders: true},
-    });
+  const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
-    console.log('User created with root folder:', user.folders[0]);
-    return user;
+  const user = await prisma.user.create({
+    data: {
+      email,
+      password: hashedPassword,
+      name,
+      folders: {
+        create: {
+          name: "/home",
+          parentId: null,
+        },
+      },
+    },
+    include: { folders: true },
+  });
+
+  console.log("User created with root folder:", user.folders[0]);
+  return user;
 }
