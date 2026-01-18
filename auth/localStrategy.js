@@ -25,7 +25,7 @@ export default function configureLocalStrategy(passport) {
 
           return done(null, user);
         } catch (err) {
-          return err;
+          return done(err);
         }
       },
     ),

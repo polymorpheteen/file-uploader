@@ -1,4 +1,6 @@
-import "dotenv/config";
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -9,11 +11,14 @@ import { prisma } from "./lib/prisma.js";
 
 import registerRouter from "./routes/registerRouter.js";
 import loginRouter from "./routes/loginRouter.js";
+import dashboardRouter from "./routes/dashboardRouter.js";
+import logoutRouter from "./routes/logoutRouter.js";
 
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -21,7 +26,7 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: true,
+      secure: false,
       sameSite: "lax",
       maxAge: 1000 * 60 * 24,
     },
@@ -31,6 +36,7 @@ app.use(
     }),
   }),
 );
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -39,6 +45,8 @@ app.set("view engine", "ejs");
 
 app.use("/register", registerRouter);
 app.use("/login", loginRouter);
+app.use("/dashboard", dashboardRouter);
+app.use("/logout", logoutRouter);
 
 app.get("/", (req, res) => {
   res.redirect("/register");
