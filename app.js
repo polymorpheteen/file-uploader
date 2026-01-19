@@ -13,6 +13,7 @@ import registerRouter from "./routes/registerRouter.js";
 import loginRouter from "./routes/loginRouter.js";
 import dashboardRouter from "./routes/dashboardRouter.js";
 import logoutRouter from "./routes/logoutRouter.js";
+import foldersRouter from "./routes/foldersRouter.js";
 
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -47,12 +48,13 @@ app.use("/register", registerRouter);
 app.use("/login", loginRouter);
 app.use("/dashboard", dashboardRouter);
 app.use("/logout", logoutRouter);
-app.use((req, res, next) => {
-  console.log("Cookie Header:", req.headers.cookie);
-  console.log("Session ID:", req.sessionID);
-  console.log("req.user:", req.user?.id);
-  next();
-});
+app.use("/folders", foldersRouter);
+// app.use((req, res, next) => {
+//   console.log("Cookie Header:", req.headers.cookie);
+//   console.log("Session ID:", req.sessionID);
+//   console.log("req.user:", req.user?.id);
+//   next();
+// });
 
 app.get("/", (req, res) => {
   res.redirect("/register");

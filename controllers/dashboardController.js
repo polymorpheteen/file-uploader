@@ -96,7 +96,7 @@ export async function showCurrentDirectory(req, res) {
       breadcrumb,
       folders,
       files,
-      parentFolderId: currentFolder.parentId, // Pass parentId for the back link
+      parentFolderId: currentFolder?.parentId || null,
     });
   } catch (error) {
     console.error("Error fetching data:", error);

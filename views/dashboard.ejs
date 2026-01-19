@@ -12,37 +12,47 @@
     </h1>
     <a href="logout">Logout</a>
 
-    <% if (parentFolderId) { %>
-        <a href="/dashboard/<%= parentFolderId %>">Back to Parent</a>
-        <% } else { %>
-            <!-- Optionally, show "Home" link if there's no parent folder (i.e., it's the root) -->
-            <a href="/dashboard">Back to Home</a>
-            <% } %>
+    <main>
+        <% if (parentFolderId) { %>
+            <a href="/dashboard/<%= parentFolderId %>">Back to Parent</a>
+            <% } else { %>
+                <!-- Optionally, show "Home" link if there's no parent folder (i.e., it's the root) -->
+                <a href="/dashboard">Back to Home</a>
+                <% } %>
 
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Folder Name</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% if (folders && folders.length> 0) { %>
-                            <% folders.forEach(folder=> { %>
-                                <tr>
-                                    <td>
-                                        📁 <a href="/dashboard/<%= folder.id %>">
-                                            <%= folder.name %>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <% }); %>
-                                    <% } else { %>
-                                        <tr>
-                                            <td>No folders available</td>
-                                        </tr>
-                                        <% } %>
-                    </tbody>
-                </table>
+                    <form action="/folders" method="post" style="margin: 1rem 0;">
+                        <input type="text" name="name" placeholder="New Folder Name" required />
+
+                        <input type="hidden" name="parentId" value="<%= currentFolder ? currentFolder.id : '' %>" />
+
+                        <button type="submit">New Folder</button>
+                    </form>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Folder Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (folders && folders.length> 0) { %>
+                                <% folders.forEach(folder=> { %>
+                                    <tr>
+                                        <td>
+                                            📁 <a href="/dashboard/<%= folder.id %>">
+                                                <%= folder.name %>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                                        <% } else { %>
+                                            <tr>
+                                                <td>No folders available</td>
+                                            </tr>
+                                            <% } %>
+                        </tbody>
+                    </table>
+    </main>
 
 </body>
 
