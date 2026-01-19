@@ -7,23 +7,28 @@ export async function createUser(email, password, name) {
   try {
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
-    const user = await prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-        name,
-        folders: {
-          create: {
-            name: "/home",
-            parentId: null,
-          },
+    const result = await prisma.$transaction(async (tx) => {
+      const user = await tx.user.create({
+        data: {
+          email,
+          password: hashedPassword,
+          name,
         },
-      },
-      include: { folders: true },
+      });
+
+      await tx.folder.create({
+        data: {
+          name: "Home",
+          parentId: null,
+          ownerId: user.id,
+        },
+      });
+
+      return user;
     });
 
-    console.log("User created with root folder:", user.folders[0]);
-    return user;
+    console.log("User created with root folder:", result);
+    return result;
   } catch (error) {
     console.error(error);
     throw new Error("User creation failed");
