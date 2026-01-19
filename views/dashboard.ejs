@@ -10,8 +10,39 @@
 <body>
     <h1>Hello, <%= user.name %>
     </h1>
-
     <a href="logout">Logout</a>
+
+    <% if (parentFolderId) { %>
+        <a href="/dashboard/<%= parentFolderId %>">Back to Parent</a>
+        <% } else { %>
+            <!-- Optionally, show "Home" link if there's no parent folder (i.e., it's the root) -->
+            <a href="/dashboard">Back to Home</a>
+            <% } %>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Folder Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (folders && folders.length> 0) { %>
+                            <% folders.forEach(folder=> { %>
+                                <tr>
+                                    <td>
+                                        📁 <a href="/dashboard/<%= folder.id %>">
+                                            <%= folder.name %>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <% }); %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td>No folders available</td>
+                                        </tr>
+                                        <% } %>
+                    </tbody>
+                </table>
 
 </body>
 

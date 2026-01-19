@@ -1,3 +1,4 @@
+import { showCurrentDirectory } from "../controllers/dashboardController.js";
 import { Router } from "express";
 
 const dashboardRouter = Router();
@@ -7,11 +8,8 @@ function ensureAuthenticated(req, res, next) {
   res.redirect("/login");
 }
 
-dashboardRouter.get("/", ensureAuthenticated, (req, res) => {
-  console.log("User is authenticated:", req.user);
-  res.render("dashboard", {
-    user: req.user,
-  });
-});
+dashboardRouter.get("/", ensureAuthenticated, showCurrentDirectory);
+
+dashboardRouter.get("/:folderId", ensureAuthenticated, showCurrentDirectory);
 
 export default dashboardRouter;

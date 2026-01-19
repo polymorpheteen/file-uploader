@@ -28,7 +28,7 @@ app.use(
       httpOnly: true,
       secure: false,
       sameSite: "lax",
-      maxAge: 1000 * 60 * 24,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
     },
     store: new PrismaSessionStore(prisma, {
       checkPeriod: 2 * 60 * 1000,
@@ -47,6 +47,12 @@ app.use("/register", registerRouter);
 app.use("/login", loginRouter);
 app.use("/dashboard", dashboardRouter);
 app.use("/logout", logoutRouter);
+app.use((req, res, next) => {
+  console.log("Cookie Header:", req.headers.cookie);
+  console.log("Session ID:", req.sessionID);
+  console.log("req.user:", req.user?.id);
+  next();
+});
 
 app.get("/", (req, res) => {
   res.redirect("/register");
