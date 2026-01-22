@@ -21,31 +21,15 @@ export async function showCurrentDirectory(req, res) {
   const userId = req.user.id;
   const { folderId } = req.params;
 
-  let currentFolder;
+  let currentFolder = null;
   let folders = [];
   let files = [];
 
   try {
     if (!folderId) {
-      // Root folder, or no folder selected
-      currentFolder = await prisma.folder.findFirst({
-        where: {
-          ownerId: userId,
-          parentId: null, // Root folder
-        },
-      });
+      // ROOT VIEW
+      currentFolder = null;
 
-      if (!currentFolder) {
-        currentFolder = await prisma.folder.create({
-          data: {
-            ownerId: userId,
-            name: "Home", // Default root folder name
-            parentId: null,
-          },
-        });
-      }
-
-      // Fetch root folders and files
       folders = await prisma.folder.findMany({
         where: {
           ownerId: userId,
@@ -57,12 +41,11 @@ export async function showCurrentDirectory(req, res) {
       files = await prisma.file.findMany({
         where: {
           ownerId: userId,
-          folderId: null, // Root files (if any)
+          folderId: null,
         },
         orderBy: { name: "asc" },
       });
     } else {
-      // Fetch specific folder by folderId
       currentFolder = await prisma.folder.findFirst({
         where: {
           id: folderId,
@@ -74,28 +57,53 @@ export async function showCurrentDirectory(req, res) {
         return res.status(404).send("Folder not found");
       }
 
-      // Fetch subfolders and files for the current folder
       folders = await prisma.folder.findMany({
-        where: { parentId: folderId },
+        where: {
+          ownerId: userId,
+          parentId: folderId,
+        },
         orderBy: { name: "asc" },
       });
 
       files = await prisma.file.findMany({
-        where: { folderId },
+        where: {
+          ownerId: userId,
+          folderId: folderId,
+        },
         orderBy: { name: "asc" },
       });
     }
 
-    // Build breadcrumb path for the current folder
-    const breadcrumb = await buildBreadcrumb(currentFolder);
+    const breadcrumb = currentFolder
+      ? await buildBreadcrumb(currentFolder)
+      : [];
 
-    // Render dashboard with current folder data
+    const items = [
+      ...folders.map((folder) => ({
+        id: folder.id,
+        name: folder.name,
+        type: "folder",
+      })),
+      ...files.map((file) => ({
+        id: file.id,
+        name: file.name,
+        type: "file",
+        size: file.size,
+      })),
+    ];
+
+    items.sort((a, b) => {
+      if (a.type !== b.type) {
+        return a.type === "folder" ? -1 : 1;
+      }
+      return a.name.localeCompare(b.name);
+    });
+
     res.render("dashboard", {
       user: req.user,
       currentFolder,
       breadcrumb,
-      folders,
-      files,
+      items,
       parentFolderId: currentFolder?.parentId || null,
     });
   } catch (error) {

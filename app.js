@@ -8,12 +8,15 @@ import session from "express-session";
 import passport from "./auth/passport.js";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import { prisma } from "./lib/prisma.js";
+import methodOverride from "method-override";
 
 import registerRouter from "./routes/registerRouter.js";
 import loginRouter from "./routes/loginRouter.js";
 import dashboardRouter from "./routes/dashboardRouter.js";
 import logoutRouter from "./routes/logoutRouter.js";
 import foldersRouter from "./routes/foldersRouter.js";
+import uploadRouter from "./routes/uploadRouter.js";
+import filesRouter from "./routes/filesRouter.js";
 
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -44,11 +47,15 @@ app.use(passport.session());
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
+app.use(methodOverride("_method"));
+
 app.use("/register", registerRouter);
 app.use("/login", loginRouter);
 app.use("/dashboard", dashboardRouter);
 app.use("/logout", logoutRouter);
 app.use("/folders", foldersRouter);
+app.use("/upload", uploadRouter);
+app.use("/files", filesRouter);
 // app.use((req, res, next) => {
 //   console.log("Cookie Header:", req.headers.cookie);
 //   console.log("Session ID:", req.sessionID);

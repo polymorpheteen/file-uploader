@@ -1,4 +1,8 @@
-import { createNewFolder } from "../controllers/foldersController.js";
+import {
+  createNewFolder,
+  renameFolder,
+  removeFolder,
+} from "../controllers/foldersController.js";
 import { Router } from "express";
 
 const foldersRouter = Router();
@@ -9,5 +13,8 @@ function ensureAuthenticated(req, res, next) {
 }
 
 foldersRouter.post("/", ensureAuthenticated, createNewFolder);
+
+foldersRouter.patch("/:id", ensureAuthenticated, renameFolder);
+foldersRouter.delete("/:id", ensureAuthenticated, removeFolder);
 
 export default foldersRouter;

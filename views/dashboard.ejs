@@ -28,31 +28,136 @@
                         <button type="submit">New Folder</button>
                     </form>
 
-                    <table>
+                    <form action="/upload" method="post" enctype="multipart/form-data"
+                        style="display: inline-block; margin-left: 1rem;">
+                        <input type="file" name="files" multiple webkitdirectory directory />
+
+                        <input type="hidden" name="parentId" value="<%= currentFolder ? currentFolder.id : '' %>" />
+
+                        <button type="submit">Upload</button>
+                    </form>
+
+                    <table border="1" cellpadding="6">
                         <thead>
                             <tr>
-                                <th>Folder Name</th>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Size</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
+
                         <tbody>
-                            <% if (folders && folders.length> 0) { %>
-                                <% folders.forEach(folder=> { %>
+                            <% if (items.length> 0) { %>
+                                <% items.forEach(item=> { %>
                                     <tr>
+                                        <!-- Name -->
                                         <td>
-                                            📁 <a href="/dashboard/<%= folder.id %>">
-                                                <%= folder.name %>
-                                            </a>
+                                            <% if (item.type==="folder" ) { %>
+                                                📁
+                                                <a href="/dashboard/<%= item.id %>">
+                                                    <%= item.name %>
+                                                </a>
+                                                <% } else { %>
+                                                    📄 <%= item.name %>
+                                                        <% } %>
+                                        </td>
+
+                                        <!-- Type -->
+                                        <td>
+                                            <%= item.type %>
+                                        </td>
+
+                                        <!-- Size -->
+                                        <td>
+                                            <% if (item.type==="file" ) { %>
+                                                <% let size=item.size; let displaySize; if (size < 1024) {
+                                                    displaySize=size + " B" ; } else if (size < 1024 * 1024) {
+                                                    displaySize=(size / 1024).toFixed(1) + " KB" ; } else {
+                                                    displaySize=(size / (1024 * 1024)).toFixed(1) + " MB" ; } %>
+                                                    <%= displaySize %>
+                                                        <% } %>
+                                        </td>
+
+                                        <!-- Actions -->
+                                        <td>
+                                            <% if (item.type==="folder" ) { %>
+                                                <form action="/folders/<%= item.id %>?_method=PATCH" method="POST"
+                                                    style="display:inline;">
+                                                    <input type="text" name="name" value="<%= item.name %>" required />
+                                                    <button type="submit">Rename</button>
+                                                </form>
+
+                                                <form action="/folders/<%= item.id %>?_method=DELETE" method="POST"
+                                                    style="display:inline">
+                                                    <button type="submit"
+                                                        onclick="return confirm('Delete this folder?')">Delete</button>
+                                                </form>
+                                                <% } else { %>
+                                                    <button onclick="showFileInfo('<%= item.id %>')">Info</button>
+
+                                                    <form action="/files/<%= item.id %>?_method=DELETE" method="POST"
+                                                        style="display:inline">
+                                                        <button type="submit"
+                                                            onclick="return confirm('Delete this file?')">Delete</button>
+                                                    </form>
+                                                    <% } %>
                                         </td>
                                     </tr>
-                                    <% }); %>
+                                    <% }) %>
                                         <% } else { %>
                                             <tr>
-                                                <td>No folders available</td>
+                                                <td colspan="4">This folder is empty</td>
                                             </tr>
                                             <% } %>
                         </tbody>
                     </table>
+                    <div id="fileInfoModal"
+                        style="display:none; position:fixed; top:20%; left:50%; transform:translateX(-50%); background:#fff; border:1px solid #ccc; padding:1rem; box-shadow:0 4px 10px rgba(0,0,0,0.2); ">
+
+                        <h3>File Information</h3>
+                        <div id="fileInfoContent"></div>
+                        <button onclick="closeFileInfo()">Close</button>
+                    </div>
+
     </main>
+
+    <script>
+        async function showFileInfo(fileId) {
+            const res = await fetch(`/files/${fileId}/info`, {
+                headers: {
+                    "Accept": "application/json"
+                }
+            });
+
+            if (!res.ok) {
+                alert("Could not load file info");
+                return;
+            }
+
+            const file = await res.json();
+
+            document.getElementById("fileInfoContent").innerHTML = `
+            <p><strong>Name:</strong> ${file.name}</p>
+            <p><strong>Type:</strong> ${file.mimeType}</p>
+            <p><strong>Size:</strong> ${formatSize(file.size)}</p>
+            <p><strong>Uploaded:</strong> ${new Date(file.createdAt).toLocaleString()}</p>
+        `;
+
+            document.getElementById("fileInfoModal").style.display = "block";
+        }
+
+        function closeFileInfo() {
+            document.getElementById("fileInfoModal").style.display = "none";
+        }
+
+        function formatSize(bytes) {
+            if (bytes < 1024) return bytes + " B";
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+            return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+        }
+    </script>
+
 
 </body>
 
