@@ -4,30 +4,35 @@ import fs from "fs";
 
 const uploadRoot = path.resolve("uploads");
 
-const allowedMimeTypes = ["image/jpeg", "image/png", "application/pdf"];
+const allowedMimeTypes = [
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+  "application/pdf",
+  "text/plain",
+  "text/csv",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "application/zip",
+  "application/x-zip-compressed",
+  "application/octet-stream",
+];
 
 if (!fs.existsSync(uploadRoot)) {
   fs.mkdirSync(uploadRoot, { recursive: true });
 }
 
 export const upload = multer({
-  storage: multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, uploadRoot);
-    },
-    filename: (req, file, cb) => {
-      const unique = Date.now() + "-" + Math.round(Math.random() * 1e9);
-
-      cb(null, unique + path.extname(file.originalname));
-    },
-  }),
-
+  storage: multer.memoryStorage(),
   limits: {
     fileSize: 10 * 1024 * 1024,
   },
 
   fileFilter: (req, file, cb) => {
-    if (allowedMimeTypes.includes(file.mimetype)) {
+    if (!file.mimetype || allowedMimeTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
       cb(new Error("File type not allowed"));
