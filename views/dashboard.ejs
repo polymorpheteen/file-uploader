@@ -55,9 +55,22 @@
                                         <td>
                                             <% if (item.type==="folder" ) { %>
                                                 📁
-                                                <a href="/dashboard/<%= item.id %>">
-                                                    <%= item.name %>
-                                                </a>
+                                                <span id="folder-name-<%= item.id %>">
+                                                    <a href="/dashboard/<%= item.id %>">
+                                                        <%= item.name %>
+                                                    </a>
+                                                </span>
+
+                                                <form action="/folders/<%= item.id %>?_method=PATCH" method="POST"
+                                                    id="folder-form-<%= item.id %>"
+                                                    style="display:none; display:inline;">
+                                                    <input type="text" name="name" value="<%= item.name %>" required />
+                                                    <button type="submit">Save</button>
+                                                    <button type="button"
+                                                        onclick="cancelFolderRename('<%= item.id %>')">
+                                                        Cancel
+                                                    </button>
+                                                </form>
                                                 <% } else { %>
                                                     📄 <%= item.name %>
                                                         <% } %>
@@ -82,11 +95,6 @@
                                         <!-- Actions -->
                                         <td>
                                             <% if (item.type==="folder" ) { %>
-                                                <form action="/folders/<%= item.id %>?_method=PATCH" method="POST"
-                                                    style="display:inline;">
-                                                    <input type="text" name="name" value="<%= item.name %>" required />
-                                                    <button type="submit">Rename</button>
-                                                </form>
 
                                                 <form action="/folders/<%= item.id %>?_method=DELETE" method="POST"
                                                     style="display:inline">
@@ -128,6 +136,22 @@
     </main>
 
     <script>
+        function startFolderRename(id) {
+            document.getElementById(`folder-name-${id}`).style.display = "none";
+
+            const form = document.getElementById(`folder-form-${id}`);
+            form.style.display = "inline";
+
+            const input = form.querySelector("input");
+            input.focus();
+            input.select();
+        }
+
+        function cancelFolderRename(id) {
+            document.getElementById(`folder-form-${id}`).style.display = "none";
+            document.getElementById(`folder-name-${id}`).style.display = "inline";
+        }
+
         async function showFileInfo(fileId) {
             const res = await fetch(`/files/${fileId}/info`, {
                 headers: {

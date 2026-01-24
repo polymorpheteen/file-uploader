@@ -94,7 +94,7 @@ export async function downloadFile(req, res) {
 
     res.redirect(`${data.signedUrl}&download=${encodeURIComponent(file.name)}`);
   } catch (err) {
-    console.error(error);
+    console.error(err);
     res.status(500).send("Could not download file");
   }
 }
