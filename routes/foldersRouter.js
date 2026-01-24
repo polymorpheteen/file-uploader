@@ -2,6 +2,7 @@ import {
   createNewFolder,
   renameFolder,
   removeFolder,
+  createFolderShareLink,
 } from "../controllers/foldersController.js";
 import { Router } from "express";
 
@@ -16,5 +17,7 @@ foldersRouter.post("/", ensureAuthenticated, createNewFolder);
 
 foldersRouter.patch("/:id", ensureAuthenticated, renameFolder);
 foldersRouter.delete("/:id", ensureAuthenticated, removeFolder);
+
+foldersRouter.post("/:id/share", ensureAuthenticated, createFolderShareLink);
 
 export default foldersRouter;

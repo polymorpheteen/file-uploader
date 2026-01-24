@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import { prisma } from "../lib/prisma.js";
 
 export async function createNewFolder(req, res) {
@@ -128,5 +129,41 @@ export async function removeFolder(req, res) {
   } catch (err) {
     console.error(err);
     res.status(500).send("Delete failed");
+  }
+}
+
+export async function createFolderShareLink(req, res) {
+  const folderId = req.params.id;
+  const userId = req.user.id;
+
+  try {
+    const folder = await prisma.folder.findFirst({
+      where: {
+        id: folderId,
+        ownerId: userId,
+      },
+    });
+
+    if (!folder) {
+      return res.status(404).send("Folder not found");
+    }
+
+    const token = crypto.randomBytes(24).toString("hex");
+
+    const shareLink = await prisma.shareLink.create({
+      data: {
+        token,
+        ownerId: userId,
+        folderId: folder.id,
+        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      },
+    });
+
+    res.json({
+      url: `${req.protocol}://${req.get("host")}/share/${shareLink.token}`,
+    });
+  } catch (err) {
+    console.error(err)
+    res.status(500).send("Could not create share link");
   }
 }

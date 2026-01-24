@@ -101,6 +101,8 @@
                                                     <button type="submit"
                                                         onclick="return confirm('Delete this folder?')">Delete</button>
                                                 </form>
+
+                                                <button onclick="shareFolder('<%= item.id %>')">Share</button>
                                                 <% } else { %>
                                                     <form action="/files/<%= item.id %>/download" method="get"
                                                         style="display:inline">
@@ -185,6 +187,22 @@
             if (bytes < 1024) return bytes + " B";
             if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
             return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+        }
+
+        async function shareFolder(folderId) {
+            const res = await fetch(`/folders/${folderId}/share`, {
+                method: "POST"
+            });
+
+            if (!res.ok) {
+                alert("Could not create share link");
+                return;
+            }
+
+            const data = await res.json();
+
+            await navigator.clipboard.writeText(data.url);
+            alert("Share link copied to clipboard!");
         }
     </script>
 

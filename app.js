@@ -17,6 +17,7 @@ import logoutRouter from "./routes/logoutRouter.js";
 import foldersRouter from "./routes/foldersRouter.js";
 import uploadRouter from "./routes/uploadRouter.js";
 import filesRouter from "./routes/filesRouter.js";
+import shareRouter from "./routes/shareRoutes.js";
 
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -56,6 +57,7 @@ app.use("/logout", logoutRouter);
 app.use("/folders", foldersRouter);
 app.use("/upload", uploadRouter);
 app.use("/files", filesRouter);
+app.use("/share", shareRouter);
 // app.use((req, res, next) => {
 //   console.log("Cookie Header:", req.headers.cookie);
 //   console.log("Session ID:", req.sessionID);

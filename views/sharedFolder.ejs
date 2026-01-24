@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shared Folder</title>
+</head>
+
+<body>
+    <h2>Shared Folder: <%= folder.name %>
+    </h2>
+
+    <ul>
+        <% folder.files.forEach(file=> { %>
+            <li>
+                📄 <%= file.name %>
+                    <a href="/files/<%= file.id %>/download">Download</a>
+            </li>
+            <% }) %>
+    </ul>
+</body>
+
+</html>
