@@ -71,3 +71,30 @@ export async function getFilesInfo(req, res) {
     res.status(500).json({ message: "Could not load file info" });
   }
 }
+
+export async function downloadFile(req, res) {
+  const fileId = req.params.id;
+  const userId = req.user.id;
+
+  try {
+    const file = await prisma.file.findFirst({
+      where: {
+        id: fileId,
+        ownerId: userId,
+      },
+    });
+
+    if (!file) {
+      return res.status(404).send("File not found");
+    }
+
+    const { data, error } = await supabase.storage.from("uploads").createSignedUrl(file.storagePath, 60);
+
+    if (error) throw error;
+
+    res.redirect(`${data.signedUrl}&download=${encodeURIComponent(file.name)}`);
+  } catch (err) {
+    console.error(error);
+    res.status(500).send("Could not download file");
+  }
+}

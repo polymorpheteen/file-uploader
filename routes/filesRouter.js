@@ -1,4 +1,4 @@
-import { removeFiles, getFilesInfo } from "../controllers/filesController.js";
+import { removeFiles, getFilesInfo, downloadFile } from "../controllers/filesController.js";
 import { Router } from "express";
 
 const filesRouter = Router();
@@ -16,5 +16,6 @@ function ensureAuthenticated(req, res, next) {
 filesRouter.delete("/:id", ensureAuthenticated, removeFiles);
 
 filesRouter.get("/:id/info", ensureAuthenticated, getFilesInfo);
+filesRouter.get("/:id/download", ensureAuthenticated, downloadFile);
 
 export default filesRouter;

@@ -94,6 +94,11 @@
                                                         onclick="return confirm('Delete this folder?')">Delete</button>
                                                 </form>
                                                 <% } else { %>
+                                                    <form action="/files/<%= item.id %>/download" method="get"
+                                                        style="display:inline">
+                                                        <button type="submit">Download</button>
+                                                    </form>
+
                                                     <button onclick="showFileInfo('<%= item.id %>')">Info</button>
 
                                                     <form action="/files/<%= item.id %>?_method=DELETE" method="POST"
