@@ -22,6 +22,7 @@ import shareRouter from "./routes/shareRoutes.js";
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(
@@ -66,7 +67,7 @@ app.use("/share", shareRouter);
 // });
 
 app.get("/", (req, res) => {
-  res.redirect("/register");
+  res.redirect("/login");
 });
 
 const PORT = 3000;

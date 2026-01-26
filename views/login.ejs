@@ -4,13 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
     <title>Log In</title>
 </head>
 
 <body>
     <main>
         <div class="login-container">
-            <h1>Log In</h1>
+            <div class="title-group">
+                <h1>Get Started</h1>
+                <p>Create a new account</p>
+            </div>
 
             <form method="post" action="/login">
 
@@ -27,7 +38,7 @@
                 <button type="submit">Log In</button>
             </form>
 
-            <p><a href="/register">Register</a></p>
+            <p><span class="text-accent">Don't have an account?</span> <a href="/register">Sign In</a></p>
         </div>
     </main>
 

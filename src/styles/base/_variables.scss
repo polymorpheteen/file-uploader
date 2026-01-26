@@ -1,0 +1,21 @@
+:root {
+  // Fonts
+  --font-ui: Inter, sans-serif;
+  --font-body: "DM Sans", sans-serif;
+
+  // Base colors
+  --color-bg: #f5f7fa;
+  --color-surface: #ffffff;
+  --color-text-primary: #1a1a1a;
+  --color-text-accent: #4a90e2;
+  --color-icon: #6b7280;
+
+  --color-input-bg: #ffffff;
+  --color-input-border: #d1d5db;
+  --color-input-text: #1a1a1a;
+  --color-input-placeholder: #9ca3af;
+  --color-input-focus-border: #4a90e2;
+  --color-input-disabled-bg: #f3f4f6;
+  --color-input-error-border: #f44336;
+  --color-input-error-text: #b71c1c;
+}
