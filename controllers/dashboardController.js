@@ -78,6 +78,13 @@ export async function showCurrentDirectory(req, res) {
         return res.status(404).send("Folder not found");
       }
 
+      await prisma.folder.update({
+        where: { id: folderId },
+        data: {
+          lastOpenedAt: new Date(),
+        },
+      });
+
       folders = await prisma.folder.findMany({
         where: {
           ownerId: userId,
@@ -105,6 +112,7 @@ export async function showCurrentDirectory(req, res) {
         name: folder.name,
         createdAt: folder.createdAt,
         type: "folder",
+        lastOpenedAt: folder.lastOpenedAt,
       })),
       ...files.map((file) => ({
         id: file.id,

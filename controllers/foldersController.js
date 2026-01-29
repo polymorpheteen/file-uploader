@@ -155,7 +155,7 @@ export async function createFolderShareLink(req, res) {
         token,
         ownerId: userId,
         folderId: folder.id,
-        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+        expiresAt: new Date(Date.now() + 60 * 1000),
       },
     });
 
@@ -163,7 +163,7 @@ export async function createFolderShareLink(req, res) {
       url: `${req.protocol}://${req.get("host")}/share/${shareLink.token}`,
     });
   } catch (err) {
-    console.error(err)
+    console.error(err);
     res.status(500).send("Could not create share link");
   }
 }

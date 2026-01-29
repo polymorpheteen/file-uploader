@@ -29,6 +29,7 @@ model Folder {
   id String @id @default(uuid())
   name String
   createdAt DateTime @default(now())
+  lastOpenedAt DateTime?
 
   owner User @relation(fields: [ownerId], references: [id])
   ownerId String

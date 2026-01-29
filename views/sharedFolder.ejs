@@ -9,21 +9,36 @@
     <link
         href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
     <title>Shared Folder</title>
 </head>
 
 <body>
-    <h2>Shared Folder: <%= folder.name %>
-    </h2>
+    <main class="shared-page">
+        <h2>Shared Folder: <%= folder.name %>
+        </h2>
 
-    <ul>
-        <% folder.files.forEach(file=> { %>
-            <li>
-                📄 <%= file.name %>
-                    <a href="/files/<%= file.id %>/download">Download</a>
-            </li>
-            <% }) %>
-    </ul>
+        <ul>
+            <% folder.files.forEach(file=> { %>
+                <li>
+                    <span class="file-name">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <g fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1.5">
+                                <path stroke-linecap="round" d="M7 21a2 2 0 0 1-2-2V3h9l5 5v11a2 2 0 0 1-2 2z" />
+                                <path d="M13 3v6h6" />
+                            </g>
+                        </svg>
+                        <%= file.name %>
+                    </span>
+                    <a href="/files/<%= file.id %>/download" class="btn btn-toolbar">Download<svg
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor"
+                                d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z" />
+                        </svg></a>
+                </li>
+                <% }) %>
+        </ul>
+    </main>
 </body>
 
 </html>

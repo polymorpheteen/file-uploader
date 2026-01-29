@@ -88,7 +88,9 @@ export async function downloadFile(req, res) {
       return res.status(404).send("File not found");
     }
 
-    const { data, error } = await supabase.storage.from("uploads").createSignedUrl(file.storagePath, 60);
+    const { data, error } = await supabase.storage
+      .from("uploads")
+      .createSignedUrl(file.storagePath, 60);
 
     if (error) throw error;
 

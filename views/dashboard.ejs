@@ -33,8 +33,20 @@
                     <!-- Optionally, show "Home" link if there's no parent folder (i.e., it's the root) -->
                     <a href="/dashboard" class="btn">Back to Home</a>
                     <% } %>
-                        <button type="submit" class="btn" data-modal="newFolderModal">New Folder</button>
-                        <button type="submit" class="btn" data-modal="uploadModal">Upload</button>
+                        <button type="submit" class="btn btn-toolbar" data-modal="newFolderModal">New Folder<svg
+                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <g fill="none">
+                                    <path
+                                        d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" />
+                                    <path fill="currentColor"
+                                        d="M9.52 3a2 2 0 0 1 1.561.75l1.4 1.75H20a2 2 0 0 1 2 2V19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm0 2H4v14h16V7.5h-7.52a2 2 0 0 1-1.561-.75zM12 9a1 1 0 0 1 1 1v2h2a1 1 0 1 1 0 2h-2v2a1 1 0 1 1-2 0v-2H9a1 1 0 1 1 0-2h2v-2a1 1 0 0 1 1-1" />
+                                </g>
+                            </svg></button>
+                        <button type="submit" class="btn btn-toolbar" data-modal="uploadModal">Upload<svg
+                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="currentColor"
+                                    d="M11 16V7.85l-2.6 2.6L7 9l5-5l5 5l-1.4 1.45l-2.6-2.6V16zm-5 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z" />
+                            </svg></button>
         </div>
 
         <section class="dashboard-content">
@@ -44,7 +56,7 @@
                         <tr>
                             <th>Name</th>
                             <th>Created</th>
-                            <th>Size</th>
+                            <th>Last Opened</th>
                             <th>Options</th>
                         </tr>
                     </thead>
@@ -72,9 +84,8 @@
                                             </div>
                                             <% } else { %>
                                                 <div class="item-name-section">
-                                                    <a href="/dashboard/<%= item.id %>" class="item-name"> <svg
-                                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                            viewBox="0 0 24 24">
+                                                    <span class="item-name"> <svg xmlns="http://www.w3.org/2000/svg"
+                                                            width="24" height="24" viewBox="0 0 24 24">
                                                             <g fill="none" stroke="currentColor" stroke-linejoin="round"
                                                                 stroke-width="1.5">
                                                                 <path stroke-linecap="round"
@@ -83,7 +94,7 @@
                                                             </g>
                                                         </svg>
                                                         <%= item.name %>
-                                                    </a>
+                                                    </span>
                                                     <% } %>
                                     </td>
 
@@ -92,15 +103,17 @@
                                         <%= timeAgo(item.createdAt) %>
                                     </td>
 
-                                    <!-- Size -->
+                                    <!-- Opened -->
                                     <td>
-                                        <% if (item.type==="file" ) { %>
-                                            <% let size=item.size; let displaySize; if (size < 1024) { displaySize=size
-                                                + " B" ; } else if (size < 1024 * 1024) { displaySize=(size /
-                                                1024).toFixed(1) + " KB" ; } else { displaySize=(size / (1024 *
-                                                1024)).toFixed(1) + " MB" ; } %>
-                                                <%= displaySize %>
-                                                    <% } %>
+                                        <% if (item.type==="folder" ) { %>
+                                            <% if (item.lastOpenedAt) { %>
+                                                Opened <%= timeAgo(item.lastOpenedAt) %>
+                                                    <% } else { %>
+                                                        Never opened
+                                                        <% } %>
+                                                            <% } else { %>
+                                                                -
+                                                                <% } %>
                                     </td>
 
                                     <!-- Actions -->

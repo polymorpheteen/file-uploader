@@ -50,7 +50,7 @@ export async function uploadFiles(req, res) {
         data: {
           name: file.originalname,
           size: file.size,
-          mimeType: file.mimeType,
+          mimeType: file.mimetype,
           storagePath,
           ownerId: userId,
           folderId,
