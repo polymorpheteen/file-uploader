@@ -1,21 +1,31 @@
 :root {
   // Fonts
-  --font-ui: Inter, sans-serif;
+  --font-ui: "Hanken Grotesk", sans-serif;
   --font-body: "DM Sans", sans-serif;
 
-  // Base colors
-  --color-bg: #f5f7fa;
-  --color-surface: #ffffff;
-  --color-text-primary: #1a1a1a;
-  --color-text-accent: #4a90e2;
-  --color-icon: #6b7280;
+  --header-height: 80px;
 
-  --color-input-bg: #ffffff;
-  --color-input-border: #d1d5db;
-  --color-input-text: #1a1a1a;
+  // Base colors
+  --color-bg: #171717;
+  --color-surface: #1d1d1d;
+
+  --color-text-primary: #fafafa;
+  --color-text-accent: #a6a6a6;
+  --color-text-hover: #137547;
+
+  --color-input-bg: #1d1d1d;
+  --color-input-border: #4d4d4d;
+  --color-input-text: #fafafa;
   --color-input-placeholder: #9ca3af;
-  --color-input-focus-border: #4a90e2;
-  --color-input-disabled-bg: #f3f4f6;
-  --color-input-error-border: #f44336;
-  --color-input-error-text: #b71c1c;
+  --color-input-focus: #676a707c;
+
+  --color-button-bg: #137547;
+  --color-button-text: #fafafa;
+  --color-button-border: #5bba6f;
+  --color-button-bg-hover: #5bba6f;
+  --color-button-text-hover: #054a29;
+
+  --color-table-heading: #1d1d1d;
+  --color-table-icon: #9fa6a8;
+  --color-table-border: #4d4d4d;
 }

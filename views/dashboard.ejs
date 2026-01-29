@@ -4,143 +4,249 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://rsms.me/">
-    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
     <title>Dashboard</title>
 </head>
 
 <body>
-    <h1>Hello, <%= user.name %>
-    </h1>
-    <a href="logout">Logout</a>
+    <header class="app-header">
+        <span>Hi, <%= user.name %>!</span>
+        <nav class="user-nav" aria-label="user-menu">
+            <a href="logout" class="logout-link">Logout<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                        d="m17 8l-1.41 1.41L17.17 11H9v2h8.17l-1.58 1.58L17 16l4-4zM5 5h7V3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h7v-2H5z" />
+                </svg></a>
+        </nav>
+    </header>
 
-    <main>
-        <% if (parentFolderId) { %>
-            <a href="/dashboard/<%= parentFolderId %>">Back to Parent</a>
-            <% } else { %>
-                <!-- Optionally, show "Home" link if there's no parent folder (i.e., it's the root) -->
-                <a href="/dashboard">Back to Home</a>
-                <% } %>
+    <main class="dashboard-page">
+        <div class="toolbar">
+            <% if (parentFolderId) { %>
+                <a href="/dashboard/<%= parentFolderId %>" class="btn">Back to Parent</a>
+                <% } else { %>
+                    <!-- Optionally, show "Home" link if there's no parent folder (i.e., it's the root) -->
+                    <a href="/dashboard" class="btn">Back to Home</a>
+                    <% } %>
+                        <button type="submit" class="btn" data-modal="newFolderModal">New Folder</button>
+                        <button type="submit" class="btn" data-modal="uploadModal">Upload</button>
+        </div>
 
-                    <form action="/folders" method="post" style="margin: 1rem 0;">
-                        <input type="text" name="name" placeholder="New Folder Name" required />
+        <section class="dashboard-content">
+            <div class="table-wrapper">
+                <table border="1" cellpadding="6" class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Created</th>
+                            <th>Size</th>
+                            <th>Options</th>
+                        </tr>
+                    </thead>
 
-                        <input type="hidden" name="parentId" value="<%= currentFolder ? currentFolder.id : '' %>" />
-
-                        <button type="submit">New Folder</button>
-                    </form>
-
-                    <form action="/upload" method="post" enctype="multipart/form-data"
-                        style="display: inline-block; margin-left: 1rem;">
-                        <input type="file" name="files" multiple webkitdirectory directory />
-
-                        <input type="hidden" name="parentId" value="<%= currentFolder ? currentFolder.id : '' %>" />
-
-                        <button type="submit">Upload</button>
-                    </form>
-
-                    <table border="1" cellpadding="6">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Type</th>
-                                <th>Size</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <% if (items.length> 0) { %>
-                                <% items.forEach(item=> { %>
-                                    <tr>
-                                        <!-- Name -->
-                                        <td>
-                                            <% if (item.type==="folder" ) { %>
-                                                📁
+                    <tbody>
+                        <% if (items.length> 0) { %>
+                            <% items.forEach(item=> { %>
+                                <tr>
+                                    <!-- Name -->
+                                    <td>
+                                        <% if (item.type==="folder" ) { %>
+                                            <div class="item-name-section">
                                                 <span id="folder-name-<%= item.id %>">
-                                                    <a href="/dashboard/<%= item.id %>">
+                                                    <a href="/dashboard/<%= item.id %>" class="item-name"> <svg
+                                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                            viewBox="0 0 24 24">
+                                                            <path fill="currentColor" fill-rule="evenodd"
+                                                                d="M9.51 5.274c-.105-.02-.23-.024-.687-.024H6.2c-.572 0-.957 0-1.253.025c-.287.023-.424.065-.514.111a1.25 1.25 0 0 0-.547.547c-.046.09-.088.227-.111.514c-.024.296-.025.68-.025 1.253v8.6c0 .572 0 .957.025 1.252c.023.288.065.425.111.515c.12.236.311.427.547.547c.09.046.227.088.514.111c.296.024.68.025 1.253.025h11.6c.572 0 .957 0 1.252-.025c.288-.023.425-.065.515-.111a1.25 1.25 0 0 0 .547-.547c.046-.09.088-.227.111-.515c.024-.295.025-.68.025-1.252v-5.6c0-.572 0-.957-.025-1.253c-.023-.287-.065-.424-.111-.514a1.25 1.25 0 0 0-.547-.547c-.09-.046-.227-.088-.515-.111c-.295-.024-.68-.025-1.252-.025h-4.123c-.394 0-.696.003-.98-.053a2.75 2.75 0 0 1-1.631-1.008c-.498-.64-.641-1.731-1.557-1.915M8.886 3.75c.364 0 .648 0 .917.053a2.75 2.75 0 0 1 1.63 1.008c.179.23.31.5.487.854c.244.488.479.942 1.07 1.06c.104.022.228.025.686.025h4.153c.535 0 .98 0 1.345.03c.38.03.736.098 1.073.27a2.75 2.75 0 0 1 1.202 1.202c.172.337.24.693.27 1.073c.03.365.03.81.03 1.345v5.66c0 .535 0 .98-.03 1.345c-.03.38-.098.736-.27 1.073a2.75 2.75 0 0 1-1.201 1.202c-.338.172-.694.24-1.074.27c-.365.03-.81.03-1.344.03H6.17c-.535 0-.98 0-1.345-.03c-.38-.03-.736-.098-1.073-.27a2.75 2.75 0 0 1-1.202-1.2c-.172-.338-.24-.694-.27-1.074c-.03-.365-.03-.81-.03-1.345V7.67c0-.535 0-.98.03-1.345c.03-.38.098-.736.27-1.073A2.75 2.75 0 0 1 3.752 4.05c.337-.172.693-.24 1.073-.27c.365-.03.81-.03 1.345-.03z"
+                                                                clip-rule="evenodd" />
+                                                        </svg>
                                                         <%= item.name %>
                                                     </a>
                                                 </span>
 
-                                                <form action="/folders/<%= item.id %>?_method=PATCH" method="POST"
-                                                    id="folder-form-<%= item.id %>"
-                                                    style="display:none; display:inline;">
-                                                    <input type="text" name="name" value="<%= item.name %>" required />
-                                                    <button type="submit">Save</button>
-                                                    <button type="button"
-                                                        onclick="cancelFolderRename('<%= item.id %>')">
-                                                        Cancel
-                                                    </button>
-                                                </form>
-                                                <% } else { %>
-                                                    📄 <%= item.name %>
-                                                        <% } %>
-                                        </td>
-
-                                        <!-- Type -->
-                                        <td>
-                                            <%= item.type %>
-                                        </td>
-
-                                        <!-- Size -->
-                                        <td>
-                                            <% if (item.type==="file" ) { %>
-                                                <% let size=item.size; let displaySize; if (size < 1024) {
-                                                    displaySize=size + " B" ; } else if (size < 1024 * 1024) {
-                                                    displaySize=(size / 1024).toFixed(1) + " KB" ; } else {
-                                                    displaySize=(size / (1024 * 1024)).toFixed(1) + " MB" ; } %>
-                                                    <%= displaySize %>
-                                                        <% } %>
-                                        </td>
-
-                                        <!-- Actions -->
-                                        <td>
-                                            <% if (item.type==="folder" ) { %>
-
-                                                <form action="/folders/<%= item.id %>?_method=DELETE" method="POST"
-                                                    style="display:inline">
-                                                    <button type="submit"
-                                                        onclick="return confirm('Delete this folder?')">Delete</button>
-                                                </form>
-
-                                                <button onclick="shareFolder('<%= item.id %>')">Share</button>
-                                                <% } else { %>
-                                                    <form action="/files/<%= item.id %>/download" method="get"
-                                                        style="display:inline">
-                                                        <button type="submit">Download</button>
-                                                    </form>
-
-                                                    <button onclick="showFileInfo('<%= item.id %>')">Info</button>
-
-                                                    <form action="/files/<%= item.id %>?_method=DELETE" method="POST"
-                                                        style="display:inline">
-                                                        <button type="submit"
-                                                            onclick="return confirm('Delete this file?')">Delete</button>
-                                                    </form>
+                                            </div>
+                                            <% } else { %>
+                                                <div class="item-name-section">
+                                                    <a href="/dashboard/<%= item.id %>" class="item-name"> <svg
+                                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                            viewBox="0 0 24 24">
+                                                            <g fill="none" stroke="currentColor" stroke-linejoin="round"
+                                                                stroke-width="1.5">
+                                                                <path stroke-linecap="round"
+                                                                    d="M7 21a2 2 0 0 1-2-2V3h9l5 5v11a2 2 0 0 1-2 2z" />
+                                                                <path d="M13 3v6h6" />
+                                                            </g>
+                                                        </svg>
+                                                        <%= item.name %>
+                                                    </a>
                                                     <% } %>
-                                        </td>
-                                    </tr>
-                                    <% }) %>
-                                        <% } else { %>
-                                            <tr>
-                                                <td colspan="4">This folder is empty</td>
-                                            </tr>
-                                            <% } %>
-                        </tbody>
-                    </table>
-                    <div id="fileInfoModal"
-                        style="display:none; position:fixed; top:20%; left:50%; transform:translateX(-50%); background:#fff; border:1px solid #ccc; padding:1rem; box-shadow:0 4px 10px rgba(0,0,0,0.2); ">
+                                    </td>
 
-                        <h3>File Information</h3>
-                        <div id="fileInfoContent"></div>
-                        <button onclick="closeFileInfo()">Close</button>
+                                    <!-- Created -->
+                                    <td>
+                                        <%= timeAgo(item.createdAt) %>
+                                    </td>
+
+                                    <!-- Size -->
+                                    <td>
+                                        <% if (item.type==="file" ) { %>
+                                            <% let size=item.size; let displaySize; if (size < 1024) { displaySize=size
+                                                + " B" ; } else if (size < 1024 * 1024) { displaySize=(size /
+                                                1024).toFixed(1) + " KB" ; } else { displaySize=(size / (1024 *
+                                                1024)).toFixed(1) + " MB" ; } %>
+                                                <%= displaySize %>
+                                                    <% } %>
+                                    </td>
+
+                                    <!-- Actions -->
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="dropdown-btn"><svg xmlns="http://www.w3.org/2000/svg"
+                                                    width="24" height="24" viewBox="0 0 24 24">
+                                                    <path fill="currentColor" fill-rule="evenodd"
+                                                        d="M7 12a2 2 0 1 1-4 0a2 2 0 0 1 4 0m5-2a2 2 0 1 1 0 4a2 2 0 0 1 0-4m7 0a2 2 0 1 1 0 4a2 2 0 0 1 0-4" />
+                                                </svg></button>
+                                            <div class="dropdown-content">
+                                                <% if (item.type==="folder" ) { %>
+                                                    <button type="button" class="btn"
+                                                        onclick="openRenameModal('<%= item.id %>', '<%= item.name %>')">
+                                                        Rename
+                                                    </button>
+
+                                                    <a href="#" onclick="shareFolder('<%= item.id %>')">Share <svg
+                                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                            viewBox="0 0 24 24">
+                                                            <path fill="currentColor"
+                                                                d="M17 22q-1.25 0-2.125-.875T14 19q0-.15.075-.7L7.05 14.2q-.4.375-.925.588T5 15q-1.25 0-2.125-.875T2 12t.875-2.125T5 9q.6 0 1.125.213t.925.587l7.025-4.1q-.05-.175-.062-.337T14 5q0-1.25.875-2.125T17 2t2.125.875T20 5t-.875 2.125T17 8q-.6 0-1.125-.213T14.95 7.2l-7.025 4.1q.05.175.063.338T8 12t-.012.363t-.063.337l7.025 4.1q.4-.375.925-.587T17 16q1.25 0 2.125.875T20 19t-.875 2.125T17 22" />
+                                                        </svg></a>
+                                                    <form action="/folders/<%= item.id %>?_method=DELETE" method="POST"
+                                                        style="margin:0;">
+                                                        <button type="submit"
+                                                            onclick="return confirm('Delete this folder?')"
+                                                            class="btn">Delete <svg xmlns="http://www.w3.org/2000/svg"
+                                                                width="24" height="24" viewBox="0 0 24 24">
+                                                                <path fill="currentColor"
+                                                                    d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z" />
+                                                            </svg></button>
+                                                    </form>
+                                                    <% } else { %>
+                                                        <form action="/files/<%= item.id %>/download" method="get"
+                                                            style="margin:0;">
+                                                            <button type="submit" class="btn">Download<svg
+                                                                    xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                    height="24" viewBox="0 0 24 24">
+                                                                    <path fill="currentColor"
+                                                                        d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z" />
+                                                                </svg></button>
+                                                        </form>
+
+                                                        <button onclick="showFileInfo('<%= item.id %>')"
+                                                            class="btn">Info<svg xmlns="http://www.w3.org/2000/svg"
+                                                                width="24" height="24" viewBox="0 0 24 24">
+                                                                <path fill="currentColor"
+                                                                    d="M11 17h2v-6h-2zm1-8q.425 0 .713-.288T13 8t-.288-.712T12 7t-.712.288T11 8t.288.713T12 9m0 13q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20m0-8" />
+                                                            </svg></button>
+
+                                                        <form action="/files/<%= item.id %>?_method=DELETE"
+                                                            method="POST" style="margin:0;">
+                                                            <button type="submit"
+                                                                onclick="return confirm('Delete this file?')"
+                                                                class="btn">Delete
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                    height="24" viewBox="0 0 24 24">
+                                                                    <path fill="currentColor"
+                                                                        d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z" />
+                                                                </svg></button>
+                                                        </form>
+                                                        <% } %>
+                                            </div>
+                                        </div>
+
+                                    </td>
+                                </tr>
+                                <% }) %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="4">This folder is empty</td>
+                                        </tr>
+                                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <div id="fileInfoModal" class="modal">
+            <div class="modal-backdrop" data-close></div>
+
+            <div class="modal-content">
+                <h3>File Information</h3>
+                <div id="fileInfoContent"></div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-ghost" data-close>Close</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="newFolderModal">
+            <div class="modal-backdrop"></div>
+
+            <div class="modal-content">
+                <h3>New Folder</h3>
+
+                <form action="/folders" method="post">
+                    <input type="text" name="name" placeholder="Folder name" required class="input" />
+
+                    <input type="hidden" name="parentId" value="<%= currentFolder ? currentFolder.id : '' %>" />
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-ghost" data-close>Cancel</button>
+                        <button type="submit" class="btn">Create</button>
                     </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="modal" id="uploadModal">
+            <div class="modal-backdrop"></div>
+
+            <div class="modal-content">
+                <h3>Upload Files</h3>
+
+                <form action="/upload" method="post" enctype="multipart/form-data">
+                    <input type="file" name="files" multiple />
+
+                    <input type="hidden" name="parentId" value="<%= currentFolder ? currentFolder.id : '' %>" />
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-ghost" data-close>Cancel</button>
+                        <button type="submit" class="btn">Upload</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="renameFolderModal" class="modal">
+            <div class="modal-backdrop"></div>
+
+            <div class="modal-content">
+                <h3>Rename Folder</h3>
+                <form id="renameFolderForm" method="POST">
+                    <input type="text" name="name" class="input" required />
+                    <div class="modal-actions">
+                        <button type="button" class="btn" data-close>Cancel</button>
+                        <button type="submit" class="btn">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
 
     </main>
 
@@ -212,6 +318,113 @@
             alert("Share link copied to clipboard!");
         }
     </script>
+
+    <script>
+        document.querySelectorAll('.dropdown-btn').forEach(btn => {
+            btn.addEventListener('click', e => {
+                e.stopPropagation();
+
+                // Close all dropdowns first
+                document.querySelectorAll('.dropdown-content').forEach(dc => {
+                    if (dc !== btn.nextElementSibling) {
+                        dc.style.display = 'none';
+                    }
+                });
+
+                const dropdown = btn.nextElementSibling;
+
+                // Toggle current dropdown
+                dropdown.style.display =
+                    dropdown.style.display === 'block' ? 'none' : 'block';
+            });
+        });
+
+        // Close all dropdowns when clicking outside
+        window.addEventListener('click', () => {
+            document.querySelectorAll('.dropdown-content').forEach(dc => {
+                dc.style.display = 'none';
+            });
+        });
+    </script>
+
+
+    <script>
+        document.querySelectorAll("[data-modal]").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const modal = document.getElementById(btn.dataset.modal);
+                modal.classList.add("active");
+            });
+        });
+
+        document.querySelectorAll("[data-close], .modal-backdrop").forEach(el => {
+            el.addEventListener("click", e => {
+                const modal = e.target.closest(".modal");
+                if (modal) modal.classList.remove("active");
+            });
+        });
+
+        function openRenameModal(folderId, folderName) {
+            const modal = document.getElementById("renameFolderModal");
+            const form = document.getElementById("renameFolderForm");
+
+            // Show modal using 'active' class
+            modal.classList.add("active");
+
+            // Set form action dynamically
+            form.action = `/folders/${folderId}?_method=PATCH`;
+
+            // Fill in current folder name
+            form.name.value = folderName;
+
+            // Focus input
+            form.name.focus();
+        }
+
+        document.querySelectorAll("#renameFolderModal [data-close]").forEach(btn => {
+            btn.addEventListener("click", () => {
+                document.getElementById("renameFolderModal").style.display = "none";
+            });
+        });
+
+        // Close if clicking backdrop
+        document.querySelectorAll("#renameFolderModal .modal-backdrop").forEach(bg => {
+            bg.addEventListener("click", () => {
+                document.getElementById("renameFolderModal").style.display = "none";
+            });
+        });
+
+        async function showFileInfo(fileId) {
+            const modal = document.getElementById("fileInfoModal");
+            const content = document.getElementById("fileInfoContent");
+
+            content.innerHTML = "Loading...";
+
+            modal.classList.add("active");
+
+            try {
+                const res = await fetch(`/files/${fileId}/info`, {
+                    headers: { Accept: "application/json" }
+                });
+
+                if (!res.ok) throw new Error();
+
+                const file = await res.json();
+
+                content.innerHTML = `
+      <p><strong>Name:</strong> ${file.name}</p>
+      <p><strong>Type:</strong> ${file.mimeType}</p>
+      <p><strong>Size:</strong> ${formatSize(file.size)}</p>
+      <p><strong>Folder:</strong> ${file.folder}</p>
+      <p><strong>Uploaded:</strong> ${new Date(file.createdAt).toLocaleString()}</p>
+    `;
+            } catch {
+                content.innerHTML = "<p>Could not load file info.</p>";
+            }
+        }
+
+
+    </script>
+
 
 
 </body>

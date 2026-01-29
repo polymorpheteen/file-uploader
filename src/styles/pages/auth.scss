@@ -1,47 +1,57 @@
 @use "../base/variables" as *;
 
-body {
+.auth-page {
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: var(--color-bg);
-  color: var(--color-text-primary);
 }
 
-a {
+.auth-page a {
   color: var(--color-text-primary);
   font-weight: 600;
+  transition: color 0.2s ease-in-out;
 }
 
-.login-container {
+.auth-page a:hover {
+  color: var(--color-text-hover);
+  text-decoration: none;
+}
+
+.auth-container {
   width: 400px;
   padding: 1.7rem 0.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-radius: 15px;
 }
 
-.login-container p {
+.title-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.auth-container p {
   font-size: 1rem;
 }
 
-.login-container > p {
+.auth-container > p {
   text-align: center;
   font-size: 0.9rem;
 }
 
-.login-container h1 {
+.auth-container h1 {
   font-size: 1.75rem;
 }
 
-.login-container .text-accent {
+.auth-container .text-accent {
   color: var(--color-icon);
 }
 
-form {
+.auth-form {
   padding: 1.3rem 1rem;
   display: flex;
   flex-direction: column;
@@ -50,34 +60,19 @@ form {
   gap: 1.25rem;
 }
 
-form .form-group {
+.auth-form .form-group {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
 }
 
-form button {
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 1.25rem;
-  background-color: var(--color-input-bg);
-  border: solid 1px var(--color-input-border);
-  border-radius: 5px;
-  padding: 0.3rem 0;
-}
-
-.form-group input {
-  font-size: 0.9rem;
-  padding: 0.25rem 0.5rem;
-  width: 100%;
-  background-color: var(--color-input-bg);
-  border: solid 1px var(--color-input-border);
-  border-radius: 5px;
-  color: var(--color-input-text);
-}
-
 .form-group label {
   font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.submit-btn:hover {
+  background-color: var(--color-button-bg-hover);
+  color: var(--color-button-text-hover);
 }

@@ -2,4 +2,9 @@
 @use "base/typography";
 @use "base/variables" as *;
 
-@use "pages/login";
+@use "components/buttons";
+@use "components/input";
+@use "components/modal";
+
+@use "pages/auth";
+@use "pages/dashboard.scss";

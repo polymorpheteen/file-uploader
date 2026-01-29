@@ -1,5 +1,26 @@
 import { prisma } from "../lib/prisma.js";
 
+function timeAgo(date) {
+  const seconds = Math.floor((Date.now() - new Date(date)) / 1000);
+
+  const intervals = [
+    { label: "year", seconds: 31536000 },
+    { label: "month", seconds: 2592000 },
+    { label: "day", seconds: 86400 },
+    { label: "hour", seconds: 3600 },
+    { label: "minute", seconds: 60 },
+  ];
+
+  for (const interval of intervals) {
+    const count = Math.floor(seconds / interval.seconds);
+    if (count >= 1) {
+      return `${count} ${interval.label}${count > 1 ? "s" : ""} ago`;
+    }
+  }
+
+  return "just now";
+}
+
 async function buildBreadcrumb(folder) {
   const path = [];
 
@@ -82,12 +103,14 @@ export async function showCurrentDirectory(req, res) {
       ...folders.map((folder) => ({
         id: folder.id,
         name: folder.name,
+        createdAt: folder.createdAt,
         type: "folder",
       })),
       ...files.map((file) => ({
         id: file.id,
         name: file.name,
         type: "file",
+        createdAt: file.createdAt,
         size: file.size,
       })),
     ];
@@ -105,6 +128,7 @@ export async function showCurrentDirectory(req, res) {
       breadcrumb,
       items,
       parentFolderId: currentFolder?.parentId || null,
+      timeAgo,
     });
   } catch (error) {
     console.error("Error fetching data:", error);

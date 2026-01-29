@@ -4,54 +4,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://rsms.me/">
-    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
     <title>Register</title>
 </head>
 
 <body>
-    <main>
-        <div class="register-container">
-            <h1>Create an account</h1>
+    <main class="auth-page">
+        <div class="auth-container register-container">
+            <div class="title-group">
+                <h1>Get started</h1>
+                <p>Create a new account</p>
+            </div>
 
             <% if (error) { %>
                 <p style="color: red;">
                     <%= error %>
                 </p>
                 <% } %>
-                    <form method="post" action="/register">
+                    <form method="post" action="/register" class="auth-form">
 
                         <div class="form-group">
-                            <label for="name">Full Name:</label>
-                            <input type="text" name="name" id="name" required aria-required="true">
+                            <label for="name">Full Name</label>
+                            <input type="text" name="name" id="name" required aria-required="true" class="input">
                         </div>
 
                         <div class="form-group">
-                            <label for="email">Email:</label>
-                            <input type="email" id="email" name="email" required aria-required="true">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required aria-required="true" class="input">
                         </div>
 
                         <div class="form-group">
-                            <label for="password">Password:</label>
+                            <label for="password">Password</label>
                             <input type="password" id="password" name="password" required aria-required="true"
-                                minlength="8">
+                                minlength="8" class="input">
                         </div>
 
                         <div class="form-group">
-                            <label for="confirmPassword">Confirm Password:</label>
+                            <label for="confirmPassword">Confirm Password</label>
                             <input type="password" id="confirmPassword" name="confirmPassword" required
-                                aria-required="true" minlength="8">
+                                aria-required="true" minlength="8" class="input">
                         </div>
 
-                        <button type="submit">Register</button>
+                        <button type="submit" class="btn submit-btn">Sign Up</button>
                     </form>
 
-                    <p>Already have an account? <a href="/login">Log in</a></p>
+                    <p><span class="text-accent">Already have an account?</span> <a href="/login">Sign in</a></p>
         </div>
     </main>
 </body>

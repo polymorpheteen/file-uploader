@@ -1,0 +1,36 @@
+.btn {
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: var(--color-button-bg);
+  color: var(--color-button-text);
+  border: solid 1px var(--color-button-border);
+  border-radius: 5px;
+  padding: 0.3rem 0.8rem;
+  transition:
+    background-color 0.1s ease-in-out,
+    color 0.1s ease-in-out;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &:hover {
+    background-color: var(--color-button-bg-hover);
+    color: var(--color-button-text-hover);
+  }
+}
+
+.btn-submit {
+  margin-top: 1.25rem;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-text-accent);
+}
+
+.dropdown-btn {
+  background: transparent;
+}
