@@ -32,7 +32,7 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: false,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       maxAge: 1000 * 60 * 60 * 24 * 7,
     },
@@ -59,12 +59,6 @@ app.use("/folders", foldersRouter);
 app.use("/upload", uploadRouter);
 app.use("/files", filesRouter);
 app.use("/share", shareRouter);
-// app.use((req, res, next) => {
-//   console.log("Cookie Header:", req.headers.cookie);
-//   console.log("Session ID:", req.sessionID);
-//   console.log("req.user:", req.user?.id);
-//   next();
-// });
 
 app.get("/", (req, res) => {
   res.redirect("/login");
