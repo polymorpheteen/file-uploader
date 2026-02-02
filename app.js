@@ -22,6 +22,8 @@ import shareRouter from "./routes/shareRoutes.js";
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+app.set("trust proxy", 1);
+
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
