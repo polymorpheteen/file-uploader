@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build-css": "npx sass src/styles/main.scss:public/css/main.css --style=compressed && npx prisma generate",
-    "build-prisma": "prisma generate",
-    "build": "npm run build-css && npm run build-prisma",
+    "build-css": "npx sass src/styles/main.scss:public/css/main.css --style=compressed",
+    "build-prisma": "npx prisma generate",
+    "migrate": "npx prisma migrate deploy",
+    "build": "npm run build-css && npm run build-prisma && npm run migrate",
     "start": "node app.js"
   },
   "repository": {
