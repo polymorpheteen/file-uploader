@@ -22,7 +22,9 @@ import shareRouter from "./routes/shareRoutes.js";
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-app.set("trust proxy", 1);
+if (process.env.NODE_ENV === "production") {
+  app.set("trust proxy", 1);
+}
 
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
@@ -33,8 +35,8 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
+      httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 7,
     },
     store: new PrismaSessionStore(prisma, {
@@ -52,7 +54,6 @@ app.set("view engine", "ejs");
 
 app.use(methodOverride("_method"));
 
-app.use("/register", registerRouter);
 app.use("/login", loginRouter);
 app.use("/dashboard", dashboardRouter);
 app.use("/logout", logoutRouter);
