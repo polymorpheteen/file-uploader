@@ -50,6 +50,7 @@ app.set("view engine", "ejs");
 
 app.use(methodOverride("_method"));
 
+app.use("/register", registerRouter);
 app.use("/login", loginRouter);
 app.use("/dashboard", dashboardRouter);
 app.use("/logout", logoutRouter);
