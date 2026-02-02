@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build-css": "sass --watch src/styles/main.scss:public/css/main.css",
+    "build-css": "sass src/styles/main.scss:public/css/main.css --style=compressed",
     "build-prisma": "prisma generate",
     "build": "npm run build-css && npm run build-prisma",
     "start": "node app.js"
